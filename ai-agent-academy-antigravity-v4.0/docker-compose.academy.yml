@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+  academy:
+    image: node:20-alpine
+    platform: linux/arm64  # Universal ARM64 for M1/Antigravity Mac
+    container_name: academy-core
+    volumes:
+      - .:/app
+      - academy_modules:/app/node_modules
+    working_dir: /app
+    command: sh -c "npm i && npm run academy"
+    ports:
+      - "3000:3000"  # Antigravity MCP bridge
+    environment:
+      - NODE_ENV=production
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OLLAMA_HOST=http://ollama:11434
+      - ANTIGRAVITY_WORKSPACE=${ANTIGRAVITY_WORKSPACE:-default}
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    networks:
+      - academy-net
+
+  antigravity-bridge:
+    image: node:20-alpine
+    platform: linux/arm64
+    container_name: antigravity-mcp-bridge
+    volumes:
+      - .:/app
+      - academy_modules:/app/node_modules
+    working_dir: /app
+    command: sh -c "npm i && npm run antigravity"
+    ports:
+      - "3001:3001"  # MCP server port
+    environment:
+      - NODE_ENV=production
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OLLAMA_HOST=http://ollama:11434
+    depends_on:
+      - ollama
+    restart: unless-stopped
+    networks:
+      - academy-net
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama-local
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    networks:
+      - academy-net
+    # Uncomment for GPU support:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+  gemini-proxy:
+    image: node:20-alpine
+    platform: linux/arm64
+    container_name: gemini-proxy
+    volumes:
+      - .:/app
+      - academy_modules:/app/node_modules
+    working_dir: /app
+    command: >
+      node -e "
+        const express = require('express');
+        const app = express();
+        app.use(express.json());
+        app.get('/models', (req, res) => {
+          const hasGemini = !!process.env.GEMINI_API_KEY;
+          res.json({
+            models: hasGemini
+              ? ['gemini-3-pro', 'gemini-3-flash', 'ollama/local']
+              : ['ollama/local', 'ollama/llama3', 'ollama/mistral'],
+            active: hasGemini ? 'gemini-3-pro' : 'ollama/local',
+            autodetect: true
+          });
+        });
+        app.get('/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));
+        app.listen(3002, () => console.log('Gemini proxy live on :3002 — autodetect Gemini or fallback Ollama'));
+      "
+    ports:
+      - "3002:3002"
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+    restart: unless-stopped
+    networks:
+      - academy-net
+
+  swarm-orchestrator:
+    image: node:20-alpine
+    platform: linux/arm64
+    container_name: swarm-orchestrator
+    volumes:
+      - .:/app
+      - academy_modules:/app/node_modules
+    working_dir: /app
+    command: sh -c "npm i && node src/swarm-orchestrator/index.js"
+    environment:
+      - NODE_ENV=production
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - OLLAMA_HOST=http://ollama:11434
+      - ACADEMY_HOST=http://academy:3000
+    depends_on:
+      - academy
+      - ollama
+    restart: unless-stopped
+    networks:
+      - academy-net
+
+volumes:
+  ollama_data:
+    driver: local
+  academy_modules:
+    driver: local
+
+networks:
+  academy-net:
+    driver: bridge

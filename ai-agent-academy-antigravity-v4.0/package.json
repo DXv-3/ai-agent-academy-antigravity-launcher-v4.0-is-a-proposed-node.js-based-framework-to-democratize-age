@@ -1,0 +1,53 @@
+{
+  "name": "ai-agent-academy-antigravity",
+  "version": "4.0.0",
+  "description": "Democratize agentic AI with Google Antigravity integration — no-code agent building, swarm orchestration, MCP server bridges, and one-click deployments",
+  "main": "src/agent-builder.js",
+  "scripts": {
+    "academy": "node src/agent-builder.js",
+    "antigravity": "node src/antigravity-bridge/mcp-server.js",
+    "build research agent": "node src/agent-templates/index.js research",
+    "swarm": "node src/swarm-orchestrator/index.js",
+    "no-code": "node NO-CODE/chat-to-agent.js",
+    "marketplace:publish": "node MARKETPLACE/publish.js",
+    "teach": "cat TEACH/tutorials.md",
+    "hooks": "node src/antigravity-bridge/hooks.js",
+    "start": "node src/agent-builder.js",
+    "dev": "node --watch src/agent-builder.js"
+  },
+  "keywords": [
+    "ai-agents",
+    "antigravity",
+    "mcp",
+    "swarm",
+    "no-code",
+    "gemini",
+    "ollama",
+    "agentic-ai"
+  ],
+  "author": "AI Agent Academy Contributors",
+  "license": "MIT",
+  "dependencies": {
+    "ollama": "^0.3.0",
+    "@google/generative-ai": "^0.12.0",
+    "dockerode": "^4.0.0",
+    "express": "^4.19.2",
+    "archiver": "^7.0.0",
+    "chalk": "^5.3.0",
+    "inquirer": "^9.2.0",
+    "ora": "^8.0.0",
+    "dotenv": "^16.4.0",
+    "axios": "^1.7.0",
+    "ws": "^8.17.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/ai-agent-academy-antigravity-v4.0"
+  }
+}

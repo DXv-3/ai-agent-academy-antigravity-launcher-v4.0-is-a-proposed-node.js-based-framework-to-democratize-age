@@ -85,3 +85,4 @@ export async function GET() {
 | Date | Changes |
 |------|---------|
 | Initial | Template created with base setup |
+| 2026-02-18 | Built AI Agent Academy + Antigravity Launcher v4.0 in `ai-agent-academy-antigravity-v4.0/` — full Node.js framework with no-code agent building, swarm orchestration, MCP server bridge, 100+ templates, marketplace publisher, Docker stack, and comprehensive documentation |
