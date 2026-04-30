@@ -95,4 +95,4 @@ export async function GET() {
 |------|---------|
 | Initial | Template created with base setup |
 | 2026-02-18 | Built AI Agent Academy + Antigravity Launcher v4.0 in `ai-agent-academy-antigravity-v4.0/` — full Node.js framework with no-code agent building, swarm orchestration, MCP server bridge, 100+ templates, marketplace publisher, Docker stack, and comprehensive documentation |
-| 2026-04-29 | Added lightweight AI agent builder integration (`bun agent "description"`) to main template — template mode only, zero dependencies, creates runnable agents in `agents/` directory |
+| 2026-04-30 | Added lightweight AI agent builder integration (`bun agent "description"`) to main template — template mode only, zero dependencies, creates runnable agents in `agents/` directory |
