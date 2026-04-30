@@ -164,7 +164,6 @@ async function deployToAntigravity(agentPath) {
     });
 
     // Deploy via MCP bridge
-    const http = require('http');
     const agentCode = fs.readFileSync(agentPath, 'utf8');
     const body = JSON.stringify({
       action: 'deploy',

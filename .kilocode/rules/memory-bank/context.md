@@ -14,6 +14,7 @@ The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. I
 - [x] ESLint configuration
 - [x] Memory bank documentation
 - [x] Recipe system for common features
+- [x] Lightweight AI agent builder integration (`bun agent "description"`)
 
 ## Current Structure
 
@@ -33,6 +34,14 @@ The template is ready. Next steps depend on user requirements:
 3. Design/branding preferences
 
 ## Quick Start Guide
+
+### To build an AI agent:
+
+```bash
+bun agent "research agent that summarizes arXiv papers"
+```
+
+This creates a runnable agent in the `agents/` directory using template mode. For full AI-powered generation with Gemini/Ollama, see `ai-agent-academy-antigravity-v4.0/`.
 
 ### To add a new page:
 
@@ -86,3 +95,4 @@ export async function GET() {
 |------|---------|
 | Initial | Template created with base setup |
 | 2026-02-18 | Built AI Agent Academy + Antigravity Launcher v4.0 in `ai-agent-academy-antigravity-v4.0/` — full Node.js framework with no-code agent building, swarm orchestration, MCP server bridge, 100+ templates, marketplace publisher, Docker stack, and comprehensive documentation |
+| 2026-04-29 | Added lightweight AI agent builder integration (`bun agent "description"`) to main template — template mode only, zero dependencies, creates runnable agents in `agents/` directory |
